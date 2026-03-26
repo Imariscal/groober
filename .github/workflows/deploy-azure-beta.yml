@@ -7,11 +7,11 @@ on:
 
 env:
   AZURE_SUBSCRIPTION_ID: ea092bf5-9971-4502-b997-37ec136aeb2d
-  AZURE_RESOURCEGROUP: vibralive-beta-rg
-  AZURE_APPSERVICE_BACKEND: vibralive-api-beta
-  AZURE_APPSERVICE_FRONTEND: vibralive-web-beta
+  AZURE_RESOURCEGROUP: groober-beta-rg
+  AZURE_APPSERVICE_BACKEND: groober-api-beta
+  AZURE_APPSERVICE_FRONTEND: groober-web-beta
   NODE_VERSION: '20'
-  REGISTRY_NAME: vibralivereg
+  REGISTRY_NAME: groober95585
 
 jobs:
   build-and-deploy-backend:
