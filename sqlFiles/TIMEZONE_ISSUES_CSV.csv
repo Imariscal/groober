@@ -1,0 +1,33 @@
+File,Severity,Lines,Pattern,Issue,Fix Type,Import Needed,Estimated Time
+src/components/appointments/CancelAppointmentModal.tsx,CRÍTICA,44-46,new Date(),Conversión UTC sin timezone,utcToZonedTime,useClinicTimezone,30 min
+src/components/appointments/AssignStylistModal.tsx,CRÍTICA,157,new Date(appointment.scheduled_at),Sin conversión timezone,utcToZonedTime,useClinicTimezone,30 min
+src/components/appointments/AssignStylistModal.tsx,CRÍTICA,288,new Date(appointment.scheduled_at),Sin conversión timezone,utcToZonedTime,useClinicTimezone,30 min
+src/components/appointments/AssignStylistModal.tsx,CRÍTICA,292,new Date(...).getTime(),Cálculo sin timezone,format+utcToZonedTime,useClinicTimezone,30 min
+src/app/(protected)/clinic/grooming/page.tsx,CRÍTICA,52-54,useState(new Date()),Inicialización sin timezone,useEffect+utcToZonedTime,useClinicTimezone,90 min
+src/app/(protected)/clinic/grooming/page.tsx,CRÍTICA,149,currentDay = new Date(rangeStart),Sin conversión timezone,utcToZonedTime+startOfDay,useClinicTimezone,90 min
+src/app/(protected)/clinic/grooming/page.tsx,CRÍTICA,185-237,new Date(currentDay),Múltiples creaciones en loop,addDays+utcToZonedTime,useClinicTimezone,90 min
+src/app/(protected)/clinic/grooming/page.tsx,CRÍTICA,292-300,new Date(...).getTime(),Cálculos sin timezone,format+utcToZonedTime,useClinicTimezone,90 min
+src/app/(protected)/clinic/grooming/page.tsx,CRÍTICA,388-412,new Date(),Operaciones del calendario,utcToZonedTime,useClinicTimezone,90 min
+src/app/(protected)/clinic/grooming/page.tsx,CRÍTICA,529-666,new Date(info.dateStr),Validaciones de conflictos,utcToZonedTime+isSameDay,useClinicTimezone,90 min
+src/components/configurations/StylistAvailabilityTab.tsx,ALTA,796-797,new Date(...).toLocaleDateString(),Sin timezone,formatInClinicTz,useClinicTimezone,30 min
+src/components/configurations/StylistAvailabilityTab.tsx,ALTA,936,new Date(...).toLocaleDateString(),Sin timezone,formatInClinicTz,useClinicTimezone,30 min
+src/components/appointments/UnifiedGroomingModal.tsx,ALTA,Múltiples,Mezcla de timezone/no timezone,Revisar consistencia,useClinicTimezone,45 min
+src/app/(protected)/clinic/services/page.tsx,MEDIA,81-83,new Date(...).getTime(),Sort sin timezone,compareDesc+utcToZonedTime,no,15 min
+src/app/(protected)/clinic/packages/page.tsx,MEDIA,80-82,new Date(...).getTime(),Sort sin timezone,compareDesc+utcToZonedTime,no,15 min
+src/app/(protected)/clinic/pets/page.tsx,MEDIA,178-184,new Date(...).getTime(),Sort sin timezone,compareDesc+utcToZonedTime,no,15 min
+src/app/(protected)/clinic/price-lists/page.tsx,MEDIA,87-89,new Date(...).getTime(),Sort sin timezone,compareDesc+utcToZonedTime,no,15 min
+src/app/platform/clinics/page.tsx,MEDIA,103-105,new Date(...).getTime(),Sort sin timezone,compareDesc+utcToZonedTime,no,15 min
+src/components/pricing/PricingBreakdown.tsx,MEDIA,141,new Date(...).toLocaleString(),Sin timezone,formatInClinicTz,useClinicTimezone,15 min
+src/components/platform/PetsTable.tsx,MEDIA,75-76,new Date(),Cálculo de edad,OK or formatInClinicTz,no,10 min
+src/components/pets/ClientPetBook.tsx,MEDIA,91,Date.now(),Para generar ID,No crítico pero revisar,no,10 min
+src/components/dashboard/AdminDashboardExample.tsx,MEDIA,81-115,new Date(Date.now()),Ejemplos con timestamps,Fijar datos ejemplo,no,15 min
+src/components/configurations/EmailConfigTab.tsx,MEDIA,326,new Date(...).toLocaleString(),Sin timezone,formatInClinicTz,useClinicTimezone,10 min
+src/components/AssignOwnerModal.tsx,MEDIA,222,new Date(...).toLocaleString(),Sin timezone,formatInClinicTz,no,10 min
+src/app/platform/users/page.tsx,MEDIA,251,new Date(...).toLocaleDateString(),Sin timezone,formatInClinicTz,no,10 min
+src/app/platform/subscriptions/page.tsx,MEDIA,412,new Date(...).toLocaleDateString(),Sin timezone,formatInClinicTz,no,10 min
+src/app/platform/reminders/page.tsx,MEDIA,115,new Date().toISOString(),Timestamp sin timezone,Revisar si es esencial,useClinicTimezone,20 min
+src/app/platform/reminders/page.tsx,MEDIA,250,new Date(...).toLocaleDateString(),Sin timezone,formatInClinicTz,no,20 min
+src/app/platform/dashboard/page.tsx,MEDIA,70,new Date().toISOString(),Timestamp sin timezone,Considerar si UTC o clinic,no,10 min
+src/app/platform/audit/page.tsx,MEDIA,126,new Date(...).toLocaleString(),Sin timezone,formatInClinicTz,no,15 min
+src/app/platform/audit/page.tsx,MEDIA,134,new Date().toISOString(),Nombre archivo con fecha UTC,Considerar si UTC o clinic,no,15 min
+src/app/platform/audit/page.tsx,MEDIA,264,new Date(...).toLocaleString(),Sin timezone,formatInClinicTz,no,15 min

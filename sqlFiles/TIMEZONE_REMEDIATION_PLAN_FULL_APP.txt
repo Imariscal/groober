@@ -1,0 +1,194 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                  PLAN DE TIMEZONE UTC - COBERTURA COMPLETA                    ║
+║                    Aplicar a TODA la aplicación (no solo grooming)             ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════════════════
+📍 ARCHIVOS QUE NECESITAN UPDATES
+═══════════════════════════════════════════════════════════════════════════════
+
+CRÍTICOS (Usan toLocaleString o new Date sin timezone):
+─────────────────────────────────────────────────────────
+
+1. ✅ PricingBreakdown.tsx (línea 141)
+   ANTES: new Date(pricing.priceLockAt).toLocaleString('es-CO')
+   DESPUÉS: displayFormatters.formatForModal(pricing.priceLockAt, clinicTimezone)
+
+2. ✅ EmailConfigTab.tsx (línea 326)
+   ANTES: new Date(config.lastVerifiedAt).toLocaleString()
+   DESPUÉS: displayFormatters.formatForModal(config.lastVerifiedAt, clinicTimezone)
+
+3. ✅ AssignOwnerModal.tsx (línea 222)
+   ANTES: new Date(ownerData.invitation_expires_at).toLocaleString('es-MX')
+   DESPUÉS: displayFormatters.formatForModal(ownerData.invitation_expires_at, clinicTimezone)
+
+4. ✅ CreateAppointmentModal.tsx (línea 48, 132)
+   ANTES: new Date().toISOString()
+   DESPUÉS: new Date().toISOString() (ya UTC ✅, pero validar que sea UTC)
+
+5. ✅ StylistAvailabilityTab.tsx (líneas 799-800, 939)
+   NOTA: Ya usa formatInTimeZone ✅ pero verificar que clinicTimezone se pase
+
+SECUNDARIOS (Ya usan timezone pero podrían mejorar):
+─────────────────────────────────────────────────────
+
+6. PriceListTable.tsx
+   - Usa formatInClinicTz pero con parámetros invertidos
+   - ANTES: formatInClinicTz(new Date(priceList.createdAt), 'dd MMM yyyy', clinicTimezone)
+   - DESPUÉS: displayFormatters.formatForReport(priceList.createdAt, clinicTimezone)
+
+7. PriceListCard.tsx
+   - Mismo problema que PriceListTable
+
+8. PetCard.tsx, PetsTable.tsx
+   - Usan new Date() pero para cálculos de edad (OK para no-timezone operations)
+
+9. AppointmentContextMenu.tsx
+   - Ya usa utcToZonedTime correctamente ✅
+
+10. RescheduleAppointmentModal.tsx
+    - Ya usa utcToZonedTime correctamente ✅
+
+11. CalendarExceptionsTab.tsx
+    - Usa utcToZonedTime correctamente ✅
+
+12. DeleteCalendarExceptionConfirmation.tsx
+    - Usa utcToZonedTime correctamente ✅
+
+═══════════════════════════════════════════════════════════════════════════════
+🎯 REGLAS GLOBALES A APLICAR EN TODA LA APP
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ REGLA 1: Fechas que VIENEN del backend
+   Siempre se reciben en UTC ISO (con Z)
+   Ejemplo: "2026-03-06T15:00:00Z"
+   
+   Para MOSTRAR en UI:
+   ├─ Si es una hora específica → displayFormatters.formatForModal()
+   ├─ Si es un reporte → displayFormatters.formatForReport()
+   ├─ Si es solo la hora → displayFormatters.formatTimeOnly()
+   └─ Si es solo la fecha → displayFormatters.formatDateOnly()
+
+✅ REGLA 2: Fechas que se ENVÍAN al backend
+   Deben estar en UTC ISO con Z
+   Ejemplo: new Date().toISOString()
+   
+   EXCEPCIONES:
+   ├─ Si viene de un Input date/time → clinicLocalToUtc()
+   ├─ Si se calcula localmente → asegurarse que sea UTC
+
+✅ REGLA 3: NUNCA usar toLocaleString() ni toLocaleDateString()
+   ❌ new Date(date).toLocaleString()           INCORRECTO
+   ✅ displayFormatters.formatForModal(date, tz)  CORRECTO
+
+✅ REGLA 4: Componentes que muestren fechas DEBEN recibir clinicTimezone
+   
+   Opción A: Via props
+   ├─ <MyComponent appointment={apt} clinicTimezone={tz} />
+   
+   Opción B: Via hook
+   ├─ const tz = useClinicTimezone()
+   
+   Opción C: Via context (TODO - crear si no existe)
+
+✅ REGLA 5: Cálculos de tiempo (edad, duración, etc)
+   Son timezone-agnostic (OK usar new Date sin conversión)
+   Ejemplo: edad = (hoy - fechaNacimiento) / años
+
+═══════════════════════════════════════════════════════════════════════════════
+📋 CHECKLIST DE VALIDACIÓN POR SECCIÓN
+═══════════════════════════════════════════════════════════════════════════════
+
+DASHBOARD:
+  ☐ Audiencia.tsx - mostrar timestamps de eventos
+  ☐ Metricas.tsx - mostrar fechas de reportes
+  ☐ AdminDashboardExample.tsx - timestamps de ejemplo
+
+GROOMING (Ya hecho ✅):
+  ☐ page.tsx - Completado
+  ☐ UnifiedGroomingModal.tsx - Completado
+  ☐ AppointmentContextMenu.tsx - Completado
+  ☐ RescheduleAppointmentModal.tsx - Completado
+
+APPOINTMENTS (Revisar):
+  ☐ CreateAppointmentModal.tsx - Validar UTC
+  ☐ InvalidDateModal.tsx - Mostrar en timezone
+  ☐ CompleteAppointmentModal.tsx - Validar
+  ☐ CancelAppointmentModal.tsx - Validar
+  ☐ ViewAppointmentDetailsModal.tsx - Mostrar con tz
+
+CONFIGURACIÓN:
+  ☐ CalendarExceptionsTab.tsx - Ya usa utcToZonedTime ✅
+  ☐ StylistAvailabilityTab.tsx - Ya usa formatInTimeZone ✅
+  ☐ EmailConfigTab.tsx - ARREGLAR toLocaleString (línea 326)
+  ☐ WhatsAppConfigTab.tsx - Revisar lastVerifiedAt
+
+PRICING:
+  ☐ PriceListTable.tsx - Mejorar formatters
+  ☐ PriceListCard.tsx - Mejorar formatters
+  ☐ PricingBreakdown.tsx - ARREGLAR toLocaleString (línea 141)
+
+PLATFORM/ADMIN:
+  ☐ AssignOwnerModal.tsx - ARREGLAR toLocaleString (línea 222)
+  ☐ PetCard.tsx - OK (cálculos de edad)
+  ☐ PetsTable.tsx - OK (cálculos de edad)
+
+═══════════════════════════════════════════════════════════════════════════════
+🔧 HERRAMIENTAS DISPONIBLES AHORA
+═══════════════════════════════════════════════════════════════════════════════
+
+1. displayFormatters object (datetime-tz.ts):
+   • formatForModal(date, tz)        → "06/03/2026 08:00"
+   • formatForReport(date, tz)       → "06 Mar 2026, 08:00"
+   • formatTimeOnly(date, tz)        → "08:00"
+   • formatDateOnly(date, tz)        → "06/03/2026"
+   • formatCompact(date, tz)         → "06/03 08:00"
+   • formatLong(date, tz)            → "viernes, 06 de marzo..."
+   • formatWithTimezone(date, tz)    → "06/03/2026 08:00 (Tijuana)"
+
+2. Conversiones:
+   • clinicLocalToUtc(date, time, tz)    → Entrada del usuario
+   • utcToZonedTime(utcDate, tz)         → Lectura para mostrar
+   • getClinicDateKey(utcDate, tz)       → Clave YYYY-MM-DD en tz
+
+3. Hooks:
+   • useClinicTimezone()                 → Obtener tz actual
+
+═══════════════════════════════════════════════════════════════════════════════
+🎬 PLAN DE IMPLEMENTACIÓN
+═══════════════════════════════════════════════════════════════════════════════
+
+FASE 1: Componentes CRÍTICOS (2 horas)
+└─ PricingBreakdown.tsx
+└─ EmailConfigTab.tsx
+└─ AssignOwnerModal.tsx
+└─ CreateAppointmentModal.tsx
+
+FASE 2: Componentes SECUNDARIOS (1 hora)
+└─ PriceListTable.tsx
+└─ PriceListCard.tsx
+└─ Otros con formatters incompletos
+
+FASE 3: VALIDACIÓN COMPLETA (1 hora)
+└─ Revisar TODOS los archivos que muestren fechas
+└─ Tests de roundtrip timezone
+└─ Pruebas E2E en cada sección
+
+FASE 4: DOCUMENTACIÓN (30 min)
+└─ README con patrones correctos
+└─ Guía de qué usar en cada caso
+└─ Ejemplos de código
+
+═══════════════════════════════════════════════════════════════════════════════
+✅ CONCLUSIÓN
+═══════════════════════════════════════════════════════════════════════════════
+
+La arquitectura de timezone está LISTA. Solo necesita:
+1. Aplicar displayFormatters en los 4-5 archivos críticos
+2. Asegurar que clinicTimezone llegue a componentes que lo necesitan
+3. Reemplazar toLocaleString() por displayFormatters
+4. Tests de validación
+
+Tiempo estimado: 4-5 horas para cobertura completa.
+
+═══════════════════════════════════════════════════════════════════════════════

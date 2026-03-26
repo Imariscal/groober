@@ -1,0 +1,337 @@
+/* FullCalendar Base Styles */
+
+:root {
+  --fc-border-color: #e2e8f0;
+  --fc-button-text-color: #475569;
+  --fc-button-bg-color: #ffffff;
+  --fc-button-border-color: #cbd5e1;
+  --fc-button-hover-bg-color: #f1f5f9;
+  --fc-button-active-bg-color: #3b82f6;
+  --fc-button-active-text-color: #ffffff;
+  --fc-button-active-border-color: #3b82f6;
+  --fc-page-bg-color: #ffffff;
+  --fc-neutral-bg-color: #f8fafc;
+  --fc-neutral-text-color: #64748b;
+  --fc-today-bg-color: #eff6ff;
+  --fc-now-indicator-thickness: 2px;
+  --fc-now-indicator-color: #ef4444;
+  --fc-event-bg-color: #3b82f6;
+  --fc-event-border-color: #1d4ed8;
+  --fc-event-text-color: #ffffff;
+}
+
+.fc {
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fc *,
+.fc *::before,
+.fc *::after {
+  box-sizing: border-box;
+}
+
+.fc-unthemed .fc-highlight {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.fc-unthemed .fc-today {
+  background-color: var(--fc-today-bg-color);
+}
+
+/* Header */
+.fc-header-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-bottom: 1.5em;
+  padding: 0;
+}
+
+.fc-toolbar-title {
+  font-size: 1.75em;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* Buttons */
+.fc-button-primary {
+  background-color: var(--fc-button-active-bg-color);
+  border-color: var(--fc-button-active-border-color);
+  color: var(--fc-button-active-text-color);
+}
+
+.fc-button-primary:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.fc-button-primary:not(:disabled).fc-button-active,
+.fc-button-primary:not(:disabled):active {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.fc-button {
+  display: inline-block;
+  padding: 0.4em 0.8em;
+  margin: 0.2em;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--fc-button-border-color);
+  border-radius: 0.375em;
+  background-color: var(--fc-button-bg-color);
+  color: var(--fc-button-text-color);
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.fc-button:hover {
+  background-color: var(--fc-button-hover-bg-color);
+}
+
+.fc-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Calendar Views */
+.fc-view {
+  position: relative;
+  width: 100%;
+}
+
+/* Day Grid */
+.fc-daygrid {
+  border-color: var(--fc-border-color);
+}
+
+.fc-daygrid-day-frame {
+  min-height: 120px;
+  position: relative;
+}
+
+.fc-col-header-cell {
+  background-color: #f1f5f9;
+  border-color: var(--fc-border-color);
+  color: #475569;
+  font-weight: 600;
+  padding: 12px 4px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 0.85em;
+}
+
+.fc-daygrid-day {
+  background-color: var(--fc-page-bg-color);
+  border-color: var(--fc-border-color);
+  position: relative;
+}
+
+.fc-daygrid-day.fc-day-other {
+  background-color: #fafbfc;
+}
+
+.fc-daygrid-day.fc-day-today {
+  background-color: var(--fc-today-bg-color);
+}
+
+.fc-daygrid-day-number {
+  color: #475569;
+  padding: 8px;
+  text-align: right;
+  font-weight: 500;
+}
+
+.fc-daygrid-day-container {
+  flex-grow: 1;
+  position: relative;
+}
+
+/* Events in day grid */
+.fc-daygrid-event {
+  margin: 1px 0;
+}
+
+.fc-daygrid-event-harness {
+  padding: 0 2px;
+}
+
+/* Time Grid */
+.fc-timegrid {
+  border-color: var(--fc-border-color);
+}
+
+.fc-timegrid-slot {
+  height: 3em;
+}
+
+.fc-col-time-cell {
+  vertical-align: middle;
+  text-align: center;
+  color: var(--fc-neutral-text-color);
+  font-size: 0.85em;
+}
+
+.fc-timegrid-body {
+  border-color: var(--fc-border-color);
+}
+
+.fc-timegrid-body tr:first-child td,
+.fc-timegrid-body tr:first-child th {
+  border-color: var(--fc-border-color);
+}
+
+/* Events */
+.fc-event {
+  background-color: var(--fc-event-bg-color);
+  border: 1px solid var(--fc-event-border-color);
+  border-radius: 0.25em;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.fc-event-title {
+  color: var(--fc-event-text-color);
+  font-weight: 500;
+  padding: 2px 4px;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fc-event-time {
+  font-size: 0.85em;
+  color: var(--fc-event-text-color);
+}
+
+/* Now Indicator */
+.fc-now-indicator {
+  background-color: var(--fc-now-indicator-color);
+  height: var(--fc-now-indicator-thickness);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Highlight */
+.fc-highlight {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.fc-bg-event {
+  opacity: 0.3;
+}
+
+/* Select */
+.fc-select {
+  display: inline-block;
+  font-size: 1em;
+  padding: 0.4em;
+  border: 1px solid var(--fc-button-border-color);
+  border-radius: 0.25em;
+}
+
+/* Scrollable Container */
+.fc-scroller {
+  overflow: auto;
+}
+
+.fc-scroller-horizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.fc-scroller-vertical {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Row */
+.fc-row {
+  display: flex;
+  border-top: 1px solid var(--fc-border-color);
+}
+
+.fc-row > * {
+  flex: 1 1 0;
+  overflow: hidden;
+}
+
+/* Cell */
+.fc-cell {
+  border-top: 1px solid var(--fc-border-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .fc-header-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1.5em;
+  }
+
+  .fc-button {
+    padding: 0.3em 0.6em;
+    font-size: 0.9em;
+    margin: 0.1em;
+  }
+
+  .fc-daygrid-day-frame {
+    min-height: 80px;
+  }
+
+  .fc-event-title {
+    font-size: 0.8em;
+  }
+
+  .fc-daygrid-day-number {
+    font-size: 0.9em;
+    padding: 4px;
+  }
+}
+
+/* Unavailable/Blocked Time Slots - Gray background for non-business hours */
+.fc-bg-event {
+  background-color: #e5e7eb !important;
+  border-color: #d1d5db !important;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.fc-bgevent {
+  background-color: #e5e7eb !important;
+  border-color: #d1d5db !important;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* For timegrid background events */
+.fc-timegrid .fc-bg-event .fc-event-title {
+  display: none;
+}
+
+.fc-col-time-area .fc-bg-event {
+  background-color: #e5e7eb !important;
+  border-bottom: 1px solid #d1d5db;
+}
+
+/* Ensure unavailable areas appear dimmed across all views */
+.fc-timegrid-slot.fc-unavailable {
+  background-color: #f3f4f6 !important;
+}
+

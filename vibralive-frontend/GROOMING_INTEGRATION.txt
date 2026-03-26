@@ -1,0 +1,22 @@
+## ARCHIVOS CREADOS/MODIFICADOS
+
+### Nuevos Hooks
+- `src/hooks/useClinicConfiguration.ts` - Hook para obtener configuración de la clínica
+- `src/hooks/useClinicCalendarExceptions.ts` - Hook para obtener excepciones de calendario
+
+### Utilidades
+- `src/lib/grooming-validation.ts` - Validaciones de horarios, capacidad y utilidades
+
+### Componentes Modificados
+- `src/app/(protected)/clinic/grooming/page.tsx` - Integración de configuración y validación
+- `src/components/appointments/GroomingAppointmentModal.tsx` - Validación en tiempo real
+
+### Funcionalidades Implementadas
+1. ✅ Calendar respeta horarios laborales y no permite seleccionar fuera de horario
+2. ✅ Días CLOSED no se pueden seleccionar y se ven visualmente deshabilitados (opacidad)
+3. ✅ SPECIAL_HOURS funciona correctamente
+4. ✅ Modal valida y bloquea submit fuera de horario
+5. ✅ Validación de capacidad en CLINIC y HOME con buffer
+6. ✅ Chip de horarios en la parte superior del calendario
+7. ✅ Validación en tiempo real del horario seleccionado
+8. ✅ Información de horarios dentro del modal

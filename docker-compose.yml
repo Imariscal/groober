@@ -1,0 +1,83 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: vibralive-postgres
+    environment:
+      POSTGRES_USER: vibralive_dev
+      POSTGRES_PASSWORD: vibralive_password
+      POSTGRES_DB: vibralive_db
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=es_MX.UTF-8"
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vibralive_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vibralive-network
+
+  # Redis for Caching and Queue
+  redis:
+    image: redis:7-alpine
+    container_name: vibralive-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vibralive-network
+
+  # PgAdmin for Database Management (optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: vibralive-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@vibralive.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - vibralive-network
+
+  # Route Optimizer - Python OR-Tools Microservice
+  route-optimizer:
+    build:
+      context: ./route-optimizer
+      dockerfile: Dockerfile
+    container_name: vibralive-route-optimizer
+    ports:
+      - "8001:8001"
+    environment:
+      PORT: 8001
+      ENV: production
+      CORS_ORIGINS: http://localhost:3000,http://localhost:3001
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - vibralive-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  vibralive-network:
+    driver: bridge
